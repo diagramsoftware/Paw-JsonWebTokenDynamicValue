@@ -31,6 +31,7 @@ class JsonWebTokenDynamicValue {
     InputField('header', 'Header', 'JSON', {defaultValue: '{}'}),
     InputField('payload', 'Payload', 'JSON'),
     InputField('addTimeFields', 'Add Time Fields (iat & exp)', 'Checkbox', {defaultValue: true}),
+    InputField('timeDelta', 'Time Delta', 'Number', {persisted: false, defaultValue: 60, minValue:0}),
     InputField('signatureSecret', 'Secret', 'SecureValue'),
     InputField('signatureSecretIsBase64', 'Secret is Base64 URL-Encoded', 'Checkbox')
   ];
@@ -47,11 +48,11 @@ class JsonWebTokenDynamicValue {
       ...this.header
     }
 
-    let payload
+    let payload = this.payload
     if (this.addTimeFields) {
       payload = {
         iat: now,
-        exp: now + 60,
+        exp: now + this.timeDelta,
         ...this.payload,
       }
     } else {
